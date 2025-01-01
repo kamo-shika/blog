@@ -6,7 +6,7 @@
     "build": "vite build --mode client && vite build",
     "preview": "wrangler pages dev",
     "deploy": "bun run build && wrangler pages deploy",
-    "commit": "git add . && gitmoji -c"
+    "commit": "git add . && gitmoji -c && git push"
   },
   "private": true,
   "dependencies": {
