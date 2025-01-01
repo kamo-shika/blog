@@ -9,9 +9,9 @@
 .idea/shelf
 
 # deps
-hono-app/.amplify-hosting/
-hono-app/node_modules/
-hono-app/dist/
+.amplify-hosting/
+node_modules/
+dist/
 
 
 # env
