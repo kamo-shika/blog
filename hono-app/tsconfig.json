@@ -1,14 +1,14 @@
+//tsconfig.json
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "NodeNext",
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./dist",
     "strict": true,
-    "verbatimModuleSyntax": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": [
-      "node"
-    ],
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
-  }
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }
