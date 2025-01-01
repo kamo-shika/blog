@@ -33,7 +33,7 @@
     {
       "name": "default",
       "runtime": "nodejs20.x",
-      "entrypoint": "index.ts"
+      "entrypoint": "index.js"
     }
   ]
 }
