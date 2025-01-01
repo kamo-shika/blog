@@ -15,7 +15,6 @@ dist/
 
 # deps
 node_modules/
-bun.lockb
 
 # env
 .env
