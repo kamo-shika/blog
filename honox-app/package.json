@@ -5,11 +5,13 @@
     "dev": "vite",
     "build": "vite build --mode client && vite build",
     "preview": "wrangler pages dev",
-    "deploy": "bun run build && wrangler pages deploy"
+    "deploy": "bun run build && wrangler pages deploy",
+    "commit": "git add . && gitmoji -c"
   },
   "private": true,
   "dependencies": {
     "@hono/vite-ssg": "^0.1.0",
+    "@mdx-js/rollup": "^3.1.0",
     "hono": "^4.6.15",
     "honox": "^0.1.27"
   },
