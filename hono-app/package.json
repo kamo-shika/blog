@@ -6,7 +6,7 @@
     "start": "ts-node src/index.ts",
     "build": "tsc",
     "serve": "node dist/index.js",
-    "postbuild": "chmod +x bin/postbuild.sh && ./bin/postbuild.sh"
+    "postbuild": "chmod +x bin/postbuild.sh && cd bin/ && ./postbuild.sh"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.7",
