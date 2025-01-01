@@ -18,6 +18,9 @@ jobs:
         with:
           node-version: 20
 
+      - name: move to honox-app
+        run: cd honox-app
+
       - name: Setup bun
         uses: oven-sh/setup-bun@v1
         with:
