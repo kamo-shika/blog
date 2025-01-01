@@ -1,5 +1,4 @@
 #!/bin/bash
-
 rm -rf ./.amplify-hosting
 
 mkdir -p ./.amplify-hosting/compute
