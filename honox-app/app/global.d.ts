@@ -1,15 +1,11 @@
 import {} from 'hono'
-
-type Head = {
-  title?: string
-}
+import type { Meta } from './types'
 
 declare module 'hono' {
-  interface Env {
-    Variables: {}
-    Bindings: {}
-  }
   interface ContextRenderer {
-    (content: string | Promise<string>, head?: Head): Response | Promise<Response>
+    (
+      content: string | Promise<string>,
+      meta?: Meta & { frontmatter: Meta }
+    ): Response | Promise<Response>
   }
 }

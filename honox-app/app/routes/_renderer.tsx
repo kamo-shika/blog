@@ -1,19 +1,27 @@
-import { Style } from 'hono/css'
 import { jsxRenderer } from 'hono/jsx-renderer'
-import { Script } from 'honox/server'
 
-export default jsxRenderer(({ children, title }) => {
+export default jsxRenderer(({ children, title, frontmatter }) => {
   return (
-    <html lang="en">
+    <html lang='en'>
       <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>{title}</title>
-        <link rel="icon" href="/favicon.ico" />
-        <Script src="/app/client.ts" async />
-        <Style />
+        <meta charset='UTF-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        {<title>{title ?? frontmatter?.title ?? 'My Blog'}</title>}
+        <link rel='stylesheet' href='/static/style.css' />
       </head>
-      <body>{children}</body>
+      <body>
+        <header>
+          <h1>
+            <a href='/'>My Blog</a>
+          </h1>
+        </header>
+        <main>
+          <article>{children}</article>
+        </main>
+        <footer>
+          <p>&copy; 2024 My Blog. All rights reserved.</p>
+        </footer>
+      </body>
     </html>
   )
 })
