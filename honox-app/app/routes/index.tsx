@@ -6,6 +6,7 @@ export default function Top() {
   })
   return (
     <div>
+      <h1 class="text-3xl font-bold underline">Hello!</h1>
       <h2>Posts</h2>
       <ul class='article-list'>
         {Object.entries(posts).map(([id, module]) => {

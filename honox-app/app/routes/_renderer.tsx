@@ -7,7 +7,11 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
         <meta charset='UTF-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
         {<title>{title ?? frontmatter?.title ?? 'My Blog'}</title>}
-        <link rel='stylesheet' href='/static/style.css' />
+        {import.meta.env.PROD ? (
+          <link rel="stylesheet" href="/static/assets/style.css" />
+        ) : (
+          <link rel="stylesheet" href="/app/style.css" />
+        )}
       </head>
       <body>
         <header>

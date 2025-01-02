@@ -4,16 +4,33 @@ import honox from 'honox/vite';
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 import { defineConfig } from 'vite';
+import pages from '@hono/vite-cloudflare-pages'
 
-const entry = "./app/server.ts";
+export default defineConfig(({ mode }) => {
+  if (mode === 'client') {
+    return {
+      build: {
+        rollupOptions: {
+          input: ['./app/style.css'],
+          output: {
+            assetFileNames: 'static/assets/[name].[ext]'
+          }
+        }
+      }
+    }
+  } else {
+    const entry = "./app/server.ts";
 
-export default defineConfig({
-  plugins: [
-    honox(),
-    ssg({ entry }),
-    mdx({
-      jsxImportSource: 'hono/jsx',
-      remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
-    }),
-  ]
+    return {
+      plugins: [
+        honox(), 
+        pages(),
+        ssg({ entry }),
+        mdx({
+          jsxImportSource: 'hono/jsx',
+          remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
+        }),
+      ],
+    }
+  }
 });
