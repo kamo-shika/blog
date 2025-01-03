@@ -1,6 +1,6 @@
 import type { Meta } from "../types";
 
-const articles = import.meta.glob<{ frontmatter: Meta }>('../routes/articles/**/*.mdx', {
+const articles = import.meta.glob<{ frontmatter: Meta }>('/app/routes/articles/**/*.mdx', {
   eager: true,
 })
 
@@ -20,10 +20,10 @@ const sortByDateDesc = ():
 export const getArticles = () => {
     const articlesData = Object.entries(articles)
       .sort(sortByDateDesc())
-      .map(([id, article]) => {
+      .map(([path, article]) => {
         const { frontmatter } = article;
-        frontmatter.path = id.replace(/\.mdx$/, '').replace(/.\/routes/, '');
-        return { id, frontmatter };
+        path = path.replace(/\.mdx$/, '').replace(/\/app\/routes/, '');
+        return { path, frontmatter };
       });
     return articlesData;
 };

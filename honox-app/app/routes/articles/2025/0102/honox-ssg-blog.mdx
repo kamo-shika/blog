@@ -1,0 +1,64 @@
+---
+title: 個人ブログをHonoXで作成しました
+date: 2025-01-02
+description: 個人ブログをHonoXで作成しました
+iconUrl: https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Fire/Flat/fire_flat.svg 
+---
+## HonoXとは？
+
+[Yusuke Wada](https://github.com/yusukebe)さんが作成した、Hono と Vite を組み合わせたメタフレームワークです。
+
+- [HonoXのリポジトリ](https://github.com/honojs/honox)
+- [HonoXについて](https://zenn.dev/yusukebe/articles/724940fa3f2450)
+
+現在 HonoX はアルファ版ですが、個人的に興味があったので、今回は HonoX を使用して Zenn 風のブログを作成しました。  
+といっても Yusuke さん自身が作成されている、 [HonoX Examples](https://github.com/yusukebe/honox-examples) に MDX と TailwindCSS を利用した例があったため、そちらを参考にしてます。  
+  
+ここでは個人的に躓いた点や、その解決策を記載していきます。  
+※ブログのコードは  [GitHub](https://github.com/kamo-shika/blog/tree/main)  に公開しているので、他にいい方法があるよという方はぜひ教えてください。。。
+
+## MDXファイルのパス指定方法
+
+HonoX ではファイルベースルーティングでWEBのルーティングが決定されるので、ファイルを置くだけで勝手にルーティングされて便利です。  
+ただし別ファイル（[`/app/libs/articles.ts`](https://github.com/kamo-shika/blog/blob/main/honox-app/app/lib/articles.ts)）の`getArticles`メソッドで記事の並び替えをした際に、ファイルパスを改めて指定する必要がありました。  
+/app/routes/配下のパスを指定するよう書き換えれば問題なく遷移できたので、今回はそのようにしてます。
+
+```ts
+export const getArticles = () => {
+  const articlesData = Object.entries(articles)
+    .sort(sortByDateDesc())
+    .map(([path, article]) => {
+      const { frontmatter } = article;
+      // /app/routes/配下のパスを指定するように書き換え
+      path = path.replace(/\.mdx$/, '').replace(/\/app\/routes/, '');
+      return { path, frontmatter };
+    });
+  return articlesData;
+};
+```
+
+## Cloudflare Pages と GitHub Actions で CI/CD を構築する
+
+GitHub Actions でコミット後に Cloudflare Pages にデプロイするように設定しました。  
+ただブランチのディレクトリ構成的に、ブランチのルートディレクトリに `dist` ディレクトリが作成されなかったり、`package.json` がなかったりで、デプロイに失敗していました。  
+なので bun コマンド実行時は、直前に `cd` コマンドでアプリのルートディレクトリに移動するようにしてます。
+また、デプロイ時は `workingDirectory` を指定して、アプリのルートディレクトリに移動してからデプロイするようにしてます。
+
+## ローカル環境でクラッシュする
+
+`Error: EBUSY: resource busy or locked, lstat 'C:\DumpStack.log.tmp'` や `Error: EBUSY: resource busy or locked, lstat 'C:\hiberfil.sys'` が発生して頻繁にローカル環境でクラッシュしていました。  
+エラーを見たところ、`@hono/vite-dev-server` でエラーが発生しているようでした。  
+`package.json` の `typescript` を `5.5.X` に変更してみましたが、エラーは解消しませんでした。  
+一旦 [GitHubに載ってた解決方法](https://github.com/vitejs/vite/issues/19117)を試してみたところ、クラッシュはしなくなりましたが、今度は `(!) Could not auto-determine entry point from rollupOptions or html files and there are no explicit optimizeDeps.include patterns. Skipping dependency pre-bundling.` という別のエラーが出てくるようになってしまいました。。。
+（entrry point を指定しても同様にエラーが出てくる。。。）
+
+## 今後実装したい内容
+
+- カテゴリ機能
+- 検索機能
+- MDXのカスタマイズ
+  - コードブロック
+  - リンクカード
+- ページネーション
+
+などなど。。。記事が増えてきたら随時更新していく予定です。

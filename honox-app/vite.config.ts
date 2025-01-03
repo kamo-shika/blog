@@ -1,5 +1,6 @@
-import ssg from '@hono/vite-ssg'
+import ssg from '@hono/vite-ssg';
 import mdx from '@mdx-js/rollup';
+import devServer from '@hono/vite-dev-server';
 import honox from 'honox/vite';
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
@@ -29,6 +30,9 @@ export default defineConfig(({ mode }) => {
         mdx({
           jsxImportSource: 'hono/jsx',
           remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
+        }),
+        devServer({
+          ignoreWatching: ['*', /\.wrangler/],
         }),
       ],
     }
