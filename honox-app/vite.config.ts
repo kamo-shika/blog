@@ -32,6 +32,18 @@ export default defineConfig(({ mode }) => {
           remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
         }),
         devServer({
+          exclude: [
+            /.*\.css$/,
+            /.*\.ts$/,
+            /.*\.tsx$/,
+            /^\/@.+$/,
+            /\?t\=\d+$/,
+            /^\/favicon\.ico$/,
+            /^\/static\/.+/,
+            /^\/node_modules\/.*/,
+            /^\/app\/.+/,
+            /\.(png|jpg|jpeg|svg|webp)$/,
+          ],
           ignoreWatching: ['*', /\.wrangler/],
         }),
       ],
