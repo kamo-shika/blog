@@ -13,7 +13,7 @@ export default jsxRenderer(({ children, title, frontmatter, Layout }) => {
         <div className="my-2"></div>
         <p className="text-sm text-center">{frontmatter.date}</p>
       </div>
-      <div class="markdown bg-white my-4 p-4">
+      <div class="markdown bg-white my-4 p-4 rounded-lg">
         {children}
       </div>
     </Layout>
