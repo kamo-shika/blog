@@ -1,6 +1,7 @@
 import { jsxRenderer } from 'hono/jsx-renderer'
 import Header from '../islands/common/header'
 import Footer from '../islands/common/footer'
+import { html } from 'hono/html';
 
 export default jsxRenderer(({ children, title, frontmatter }) => {
   return (
@@ -16,6 +17,11 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
         ) : (
           <link rel="stylesheet" href="/app/style.css" />
         )}
+        {import.meta.env.PROD ? (
+          <GoogleAnalytics />
+        ) : (
+          <></>
+        )}
       </head>
       <body className="bg-teal-50 flex flex-col min-h-screen">
         <Header />
@@ -27,3 +33,21 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
     </html>
   )
 })
+
+const GoogleAnalytics = () => {
+  return (
+    <>
+      {html`
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WK6B03DCFL"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-WK6B03DCFL');
+</script>
+      `}
+    </>
+  );
+};

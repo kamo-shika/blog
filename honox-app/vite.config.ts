@@ -42,7 +42,7 @@ export default defineConfig(({ mode }) => {
             /^\/static\/.+/,
             /^\/node_modules\/.*/,
             /^\/app\/.+/,
-            /\.(png|jpg|jpeg|svg|webp)$/,
+            /.*\.(png|jpg|jpeg|svg|webp)$/,
           ],
           ignoreWatching: ['*', /\.wrangler/],
         }),
