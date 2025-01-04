@@ -1,12 +1,12 @@
 import { jsxRenderer } from "hono/jsx-renderer";
 
 
-export default jsxRenderer(({ children, title, frontmatter, Layout }) => {
+export default jsxRenderer(({ children, frontmatter, Layout }) => {
   if (!frontmatter) {
     return <></>;
   }
   return (
-    <Layout title={title} frontmatter={frontmatter}>
+    <Layout title={frontmatter.title} frontmatter={frontmatter}>
       <div className="flex flex-col items-center my-4">
         <img src={frontmatter.iconUrl} alt={frontmatter.title} className='w-16 h-16 mb-2' />
         <h1 className="text-3xl font-bold text-center">{frontmatter.title}</h1>

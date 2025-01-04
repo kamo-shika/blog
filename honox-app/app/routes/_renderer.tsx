@@ -8,6 +8,8 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
       <head>
         <meta charset='UTF-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <meta name="robots" content="all" />
+        {<meta name="description"  content={frontmatter?.description ?? '2022年新卒入社のバックエンドエンジニア。AWS等の資格を取得しながら、フロントエンド開発の経験を積むために本ブログを開設。技術と趣味の記事を発信していきます。'}/>}
         {<title>{title ?? frontmatter?.title ?? 'かもしかの遊び場'}</title>}
         {import.meta.env.PROD ? (
           <link rel="stylesheet" href="/static/assets/style.css" />
