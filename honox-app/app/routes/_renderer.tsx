@@ -7,7 +7,7 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
 
   const _title = title ?? frontmatter?.title ?? 'かもしかの遊び場'
   const _description = frontmatter?.description ?? '2022年新卒入社のバックエンドエンジニア。AWS等の資格を取得しながら、フロントエンド開発の経験を積むために本ブログを開設。技術と趣味の記事を発信していきます。'
-  const url = `https://kamoshika-playground.dev/${frontmatter?.path ?? ''}`
+  const url = `https://kamoshika-playground.dev${frontmatter?.path ?? ''}`
   return (
     <html lang='ja' class="dark">
       <head>
