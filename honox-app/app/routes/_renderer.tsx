@@ -24,16 +24,16 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
         <meta property="og:url" content={url} />
         {/* スタイルシート */}
         {import.meta.env.PROD ? (
-          <link rel="stylesheet" href="/static/assets/style.css" />
+          <link rel="stylesheet" type="text/css" href="/static/assets/style.css" />
         ) : (
-          <link rel="stylesheet" href="/app/style/style.css" />
+          <link rel="stylesheet" type="text/css" href="/app/style/style.css" />
         )}
         {import.meta.env.PROD ? (
           <GoogleAnalytics />
         ) : (
           <></>
         )}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.css" />
+        <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.css" />
       </head>
       <body className="bg-teal-50 flex flex-col min-h-screen">
         <Header />
@@ -41,8 +41,8 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
           {children}
         </main>
         <Footer />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+        <script defer>hljs.highlightAll();</script>
       </body>
     </html>
   )
@@ -53,8 +53,8 @@ const GoogleAnalytics = () => {
     <>
       {html`
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WK6B03DCFL"></script>
-<script>
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-WK6B03DCFL"></script>
+<script defer>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
