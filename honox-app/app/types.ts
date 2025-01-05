@@ -4,4 +4,5 @@ export type Meta = {
     description: string
     categories: string[]
     iconUrl: string
+    path: string
 }

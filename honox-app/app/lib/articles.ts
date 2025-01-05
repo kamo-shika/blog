@@ -23,6 +23,7 @@ export const getArticles = () => {
       .map(([path, article]) => {
         const { frontmatter } = article;
         path = path.replace(/\.mdx$/, '').replace(/\/app\/routes/, '');
+        frontmatter.path = path;
         return { path, frontmatter };
       });
     return articlesData;
