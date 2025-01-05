@@ -18,9 +18,9 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
         }
         {<title>{title ?? frontmatter?.title ?? 'かもしかの遊び場'}</title>}
         {import.meta.env.PROD ? (
-          <link rel="stylesheet" href="/static/assets/style.css" />
+          <link rel="stylesheet" href="/static/assets/style/style.css" />
         ) : (
-          <link rel="stylesheet" href="/app/style.css" />
+          <link rel="stylesheet" href="/app/style/style.css" />
         )}
         {import.meta.env.PROD ? (
           <GoogleAnalytics />
