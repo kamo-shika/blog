@@ -10,18 +10,24 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
         <meta charset='UTF-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
         <meta name="robots" content="all" />
-        {<meta name="description"  content={frontmatter?.description ?? '2022年新卒入社のバックエンドエンジニア。AWS等の資格を取得しながら、フロントエンド開発の経験を積むために本ブログを開設。技術と趣味の記事を発信していきます。'}/>}
+        {
+          <meta 
+            name="description"  
+            content={frontmatter?.description ?? '2022年新卒入社のバックエンドエンジニア。AWS等の資格を取得しながら、フロントエンド開発の経験を積むために本ブログを開設。技術と趣味の記事を発信していきます。'}
+          />
+        }
         {<title>{title ?? frontmatter?.title ?? 'かもしかの遊び場'}</title>}
         {import.meta.env.PROD ? (
-          <link rel="stylesheet" href="/static/assets/style.css" />
+          <link rel="stylesheet" href="/static/assets/style/style.css" />
         ) : (
-          <link rel="stylesheet" href="/app/style.css" />
+          <link rel="stylesheet" href="/app/style/style.css" />
         )}
         {import.meta.env.PROD ? (
           <GoogleAnalytics />
         ) : (
           <></>
         )}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.css" />
       </head>
       <body className="bg-teal-50 flex flex-col min-h-screen">
         <Header />
@@ -29,6 +35,8 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
           {children}
         </main>
         <Footer />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
       </body>
     </html>
   )

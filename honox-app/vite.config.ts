@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
     return {
       build: {
         rollupOptions: {
-          input: ['./app/style.css'],
+          input: ['./app/style/style.css'],
           output: {
             assetFileNames: 'static/assets/[name].[ext]'
           }
