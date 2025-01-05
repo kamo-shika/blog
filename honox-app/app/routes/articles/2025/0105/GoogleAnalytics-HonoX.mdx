@@ -1,0 +1,71 @@
+---
+title: HonoXで作成したサイトにGoogle Analyticsを導入しました
+date: 2025-01-05
+description: HonoXとMDX、TailwindCSSを使用してZenn風の個人ブログを作成しました。ファイルパスの指定方法やCloudflare PagesでのCI/CD構築、開発環境での問題点とその解決方法について解説します。
+iconUrl: https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Fire/Flat/fire_flat.svg 
+---
+
+## はじめに
+
+HonoXで作成したサイトにGoogle Analyticsを導入しました。  
+※そもそもGoogle Analyticsってなんだっけ？という方は[こちら](https://marketingplatform.google.com/about/analytics/)をご覧ください。）
+  
+導入の目的としては、Google アドセンスの審査通過に向けたサイトのデータを取得することです。  
+（いずれは広告収入を得て、今使ってるドメインの更新費を回収できればと考えてます。）
+
+## 導入方法
+
+HonoXでGoogle Analyticsを導入する方法は[honoxにGoogle Analyticsを追加しました - scrpbook](https://scraplbuild.com/posts/2024-05-21) を参考にしました。  
+
+routes/_renderer.tsxにGoogle Analytics 用のスクリプトをhtml helperを使用して定義します。
+
+```tsx
+const GoogleAnalytics = () => {
+  return (
+    <>
+      {html`
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WKXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-WKXXXXXXXX');
+</script>
+      `}
+    </>
+  );
+};
+```
+
+これを jsxRenderer で呼び出すだけです。
+
+```tsx
+export default jsxRenderer(({ children, title, frontmatter }) => {
+  return (
+    <html lang='ja' class="dark">
+      <head>
+        <!-- 他のメタ・リンクタグ等は省略 -->
+        {import.meta.env.PROD ? (
+          <GoogleAnalytics />
+        ) : (
+          <></>
+        )}
+      </head>
+      <body className="bg-teal-50 flex flex-col min-h-screen">
+        <!-- コンテンツは省略 -->
+      </body>
+    </html>
+  )
+})
+```
+
+これを本番環境にデプロイして数時間～48時間程度で、Google Analyticsでデータ取得ができるようになります。  
+ではでは。
+
+## 参考文献
+
+- [Google Analytics公式サイト](https://marketingplatform.google.com/about/analytics/)
+- [honoxにGoogle Analyticsを追加しました - scrpbook](https://scraplbuild.com/posts/2024-05-21)
+- [ろぐみろぐ HonoX で Google Analytics のタグを埋め込む](https://blog.seelog.me/posts/google_analytics_on_honox)
