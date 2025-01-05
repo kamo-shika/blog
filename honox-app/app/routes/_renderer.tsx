@@ -26,7 +26,7 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
         {import.meta.env.PROD ? (
           <link rel="stylesheet" type="text/css" href="/static/assets/style.css" />
         ) : (
-          <link rel="stylesheet" type="text/css" href="/app/style/style.css" />
+          <link rel="stylesheet" type="text/css" href="/app/style.css" />
         )}
         {import.meta.env.PROD ? (
           <GoogleAnalytics />
@@ -52,15 +52,15 @@ const GoogleAnalytics = () => {
   return (
     <>
       {html`
-<!-- Google tag (gtag.js) -->
-<script defer src="https://www.googletagmanager.com/gtag/js?id=G-WK6B03DCFL"></script>
-<script defer>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+        <!-- Google tag (gtag.js) -->
+        <script defer src="https://www.googletagmanager.com/gtag/js?id=G-WK6B03DCFL"></script>
+        <script defer>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
 
-  gtag('config', 'G-WK6B03DCFL');
-</script>
+          gtag('config', 'G-WK6B03DCFL');
+        </script>
       `}
     </>
   );
