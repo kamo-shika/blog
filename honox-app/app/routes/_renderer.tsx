@@ -25,7 +25,7 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
       </head>
       <body className="bg-teal-50 flex flex-col min-h-screen">
         <Header />
-        <main className="mx-4 md:mx-[16rem] lg:mx-[24rem] flex-grow">
+        <main className="mx-4 2xl:mx-[24rem] flex-grow">
           {children}
         </main>
         <Footer />
