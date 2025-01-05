@@ -33,7 +33,9 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
         ) : (
           <></>
         )}
-        <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+        <script defer>hljs.highlightAll();</script>
       </head>
       <body className="bg-teal-50 flex flex-col min-h-screen">
         <Header />
@@ -41,8 +43,6 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
           {children}
         </main>
         <Footer />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
-        <script defer>hljs.highlightAll();</script>
       </body>
     </html>
   )
