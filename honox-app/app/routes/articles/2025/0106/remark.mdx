@@ -1,0 +1,195 @@
+---
+title: HonoX で remark-gfm と rehype-highlight を導入する
+date: 2025-01-06
+description: HonoXとMDX、TailwindCSSを使用してZenn風の個人ブログを作成しました。ファイルパスの指定方法やCloudflare PagesでのCI/CD構築、開発環境での問題点とその解決方法について解説します。
+iconUrl: https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Fire/Flat/fire_flat.svg 
+---
+
+## remark-gfm について
+
+[remark-gfm](https://github.com/remarkjs/remark-gfm) は GitHub が追加したマークダウンの拡張機能（GitHub Flavored Markdown）を有効化するプラグインです。  
+これを導入すると、↓のように記載したMDXファイルにGFMの機能が有効化されます。
+
+### 導入前
+
+```md
+# MDX
+
+## GFM
+
+### Autolink literals
+
+www.example.com, https://example.com, and contact@example.com.
+
+### Footnote
+
+A note[^1]
+
+[^1]: Big note.
+
+### Strikethrough
+
+~one~ or ~~two~~ tildes.
+
+### Table
+
+| a   | b   |   c |  d  |
+| --- | :-- | --: | :-: |
+
+### Tasklist
+
+- [ ] to do
+- [x] done
+```
+
+### 導入後
+
+# MDX
+
+## GFM
+
+### Autolink literals
+
+www.example.com, https://example.com, and contact@example.com.
+
+### 脚注
+
+A note[^1]
+
+[^1]: これはサンプルで入れた脚注です。Footnotesのタイトル文字は変えられるのか？
+
+### 取り消し線
+
+~one~ or ~~two~~ tildes.
+
+### Table
+
+| a   | b   |   c |  d  |
+| --- | :-- | --: | :-: |
+
+### Tasklist
+
+- [ ] to do
+- [x] done
+
+## rehype-highlight について
+
+
+[rehype-highlight](https://github.com/rehypejs/rehype-highlight) は、Markdownのコードブロックをシンタックスハイライトするプラグインです。  
+これを導入すれば、↓のように記載したMDXファイルに対して、シンタックスハイライトが適用されます。
+
+### 導入前
+
+```md
+
+```tsx
+import { jsxRenderer } from "hono/jsx-renderer";
+
+export default jsxRenderer(({ children, frontmatter, Layout }) => {
+  if (!frontmatter) {
+    return <></>;
+  }
+  return (
+    <Layout title={frontmatter.title} frontmatter={frontmatter}>
+      <div className="flex flex-col items-center my-4">
+        <img src={frontmatter.iconUrl} alt={frontmatter.title} className='w-16 h-16 mb-2' />
+        <h1 className="text-3xl font-bold text-center">{frontmatter.title}</h1>
+        <div className="my-2"></div>
+        <p className="text-sm text-center">{frontmatter.date}</p>
+      </div>
+      <div class="markdown bg-white my-4 p-4 rounded-lg">
+        {children}
+      </div>
+    </Layout>
+  );
+});
+```
+
+### 導入後
+
+```tsx
+import { jsxRenderer } from "hono/jsx-renderer";
+
+export default jsxRenderer(({ children, frontmatter, Layout }) => {
+  if (!frontmatter) {
+    return <></>;
+  }
+  return (
+    <Layout title={frontmatter.title} frontmatter={frontmatter}>
+      <div className="flex flex-col items-center my-4">
+        <img src={frontmatter.iconUrl} alt={frontmatter.title} className='w-16 h-16 mb-2' />
+        <h1 className="text-3xl font-bold text-center">{frontmatter.title}</h1>
+        <div className="my-2"></div>
+        <p className="text-sm text-center">{frontmatter.date}</p>
+      </div>
+      <div class="markdown bg-white my-4 p-4 rounded-lg">
+        {children}
+      </div>
+    </Layout>
+  );
+});
+```
+
+## HonoX アプリに remark-gfm と rehype-highlight を導入する方法
+
+各パッケージをインストールします。
+
+```bash
+bun add remark-gfm rehype-highlight
+```
+
+その後 vite.config.ts の plugins.mdx の remarkPlugins と rehypePlugins にそれぞれ追加します。
+
+```ts
+import ssg from '@hono/vite-ssg';
+import mdx from '@mdx-js/rollup';
+import devServer from '@hono/vite-dev-server';
+import honox from 'honox/vite';
+import remarkFrontmatter from 'remark-frontmatter'
+import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
+import { defineConfig } from 'vite';
+import pages from '@hono/vite-cloudflare-pages'
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from 'rehype-highlight';
+
+export default defineConfig(({ mode }) => {
+  if (mode === 'client') {
+    return {
+      build: {
+        rollupOptions: {
+          input: ['./app/style.css'],
+          output: {
+            assetFileNames: 'static/assets/[name].[ext]'
+          }
+        }
+      }
+    }
+  } else {
+    const entry = "./app/server.ts";
+
+    return {
+      plugins: [
+        honox(), 
+        pages(),
+        ssg({ entry }),
+        mdx({
+          jsxImportSource: 'hono/jsx',
+          remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter, remarkGfm],
+          rehypePlugins: [rehypeHighlight],
+        }),
+        // other plugins
+      ],
+    }
+  }
+});
+```
+
+これで、MDXファイルにGFMとシンタックスハイライトが適用されます。
+シンタックスハイライトのテーマを変更する場合は、head タグに以下の link タグを追加してください。
+ファイル名は[highlight.jsのsrc/Github](https://github.com/highlightjs/highlight.js/tree/main/src/styles)にファイル名の一覧があります。また、[highlightjs の公式ページ](https://highlightjs.org/demo)で各テーマを試すことができます。
+
+```html
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/《ファイル名》" />
+```
+
+HonoXならviteのエコシステムがそのまま使えるので、いろいろなプラグインを簡単に導入できて便利ですね。
