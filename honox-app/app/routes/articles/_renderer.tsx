@@ -1,6 +1,5 @@
 import { jsxRenderer } from "hono/jsx-renderer";
 
-
 export default jsxRenderer(({ children, frontmatter, Layout }) => {
   if (!frontmatter) {
     return <></>;

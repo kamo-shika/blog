@@ -105,8 +105,3 @@
 .markdown td {
     @apply border py-1 px-3;
 }
-
-/* Override pygments style background color. */
-.markdown .highlight pre {
-    @apply bg-gray-100 !important;
-}
