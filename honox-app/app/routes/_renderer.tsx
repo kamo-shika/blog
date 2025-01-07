@@ -34,6 +34,14 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
           <></>
         )}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+
+        {/* ファビコン */}
+        <link rel="icon" type="image/png" href="/static/favicon/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/svg+xml" href="/static/favicon/favicon.svg" />
+        <link rel="shortcut icon" href="/static/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon/apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-title" content="かもしかの遊び場" />
+        <link rel="manifest" href="/static/favicon/site.webmanifest" />
       </head>
       <body className="bg-teal-50 flex flex-col min-h-screen">
         <Header />

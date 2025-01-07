@@ -42,6 +42,7 @@ export default defineConfig(({ mode }) => {
             /^\/@.+$/,
             /\?t\=\d+$/,
             /^\/favicon\.ico$/,
+            /^\/site\.webmanifest$/,
             /^\/static\/.+/,
             /^\/node_modules\/.*/,
             /^\/app\/.+/,
