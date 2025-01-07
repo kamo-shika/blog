@@ -23,19 +23,21 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
         <meta property="og:description" content={_description} />
         <meta property="og:locale" content="ja_JP" />
         <meta property="og:url" content={url} />
-        
+
         {/* スタイルシート */}
         {import.meta.env.PROD ? (
           <link rel="stylesheet" type="text/css" href="/static/assets/style.css" />
         ) : (
           <link rel="stylesheet" type="text/css" href="/app/style.css" />
         )}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" />
+
+        {/* Google Analytics */}
         {import.meta.env.PROD ? (
           <GoogleAnalytics />
         ) : (
           <></>
         )}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
 
         {/* ファビコン */}
         <link rel="icon" type="image/png" href="/static/favicon/favicon-96x96.png" sizes="96x96" />
