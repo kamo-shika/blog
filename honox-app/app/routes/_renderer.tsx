@@ -11,6 +11,7 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
   return (
     <html lang='ja' class="dark">
       <head>
+        {/* タイトル・メタデータ */}
         <title>{_title}</title>
         <meta charset='UTF-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
@@ -22,6 +23,7 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
         <meta property="og:description" content={_description} />
         <meta property="og:locale" content="ja_JP" />
         <meta property="og:url" content={url} />
+        
         {/* スタイルシート */}
         {import.meta.env.PROD ? (
           <link rel="stylesheet" type="text/css" href="/static/assets/style.css" />

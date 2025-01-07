@@ -108,5 +108,5 @@
 
 /* Override pygments style background color. */
 .markdown .highlight pre {
-    @apply bg-gray-900 !important;
+    @apply !bg-gray-900;
 }
