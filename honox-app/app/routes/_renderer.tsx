@@ -30,7 +30,7 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
         ) : (
           <link rel="stylesheet" type="text/css" href="/app/style.css" />
         )}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
 
         {/* Google Analytics */}
         {import.meta.env.PROD ? (
