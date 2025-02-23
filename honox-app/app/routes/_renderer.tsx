@@ -24,6 +24,9 @@ export default jsxRenderer(({ children, title, frontmatter }) => {
         <meta property="og:locale" content="ja_JP" />
         <meta property="og:url" content={url} />
 
+        {/* Google AdSense */}
+        <meta name="google-adsense-account" content="ca-pub-5133229446083331" />
+
         {/* スタイルシート */}
         {import.meta.env.PROD ? (
           <link rel="stylesheet" type="text/css" href="/static/assets/style.css" />
