@@ -1,0 +1,146 @@
+---
+title: シングルインスタンスでSQLiteを利用する Rails 8 アプリを Fly.io にデプロイする
+date: 2025-02-23
+description: シングルインスタンスでSQLiteを利用する Rails 8 アプリを Fly.io にデプロイする
+iconUrl: https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Bird/Flat/bird_flat.svg
+---
+
+## シングルインスタンスでSQLiteを利用する Rails 8 アプリを Fly.io にデプロイする
+
+最近 Rails と SQLite を利用したアプリを作成したので、デプロイ先を探していたところ、
+[シングルインスタンスでSQLiteなRails 8アプリをFly.ioにデプロイする](https://zenn.dev/laiso/articles/cabf017b512ce9) という記事を見つけました。今回はこの記事の内容を参考に、Fly.ioにデプロイしてみます。
+
+## Fly.io にデプロイする
+
+### アカウントの作成
+まず、[Fly.io](https://fly.io/) にアカウントの新規登録をします。  
+※クレジットカードを登録しないと、アプリのデプロイができないので、注意してください。
+
+アカウントの作成が完了したら、[flyctl](https://fly.io/docs/getting-started/launch-demo/) をインストールします。
+
+```bash
+curl -L https://fly.io/install.sh | sh
+```
+
+インストールが完了したら、ログインします。
+
+```bash
+fly auth login
+```
+
+### 設定ファイルの作成
+
+[Deploy with a Dockerfile](https://fly.io/docs/languages-and-frameworks/dockerfile/) に従って、Fly.ioの設定ファイルを作成します。
+
+```bash
+fly launch
+```
+
+設定は下記のようにしました。
+
+```bash
+Organization: MyName                 //自分のアカウント名
+Name:         my-app-name            //自分のアプリ名
+Region:       nrt                    //東京リージョン
+App Machines: shared-cpu-1x, 1GB RAM //デフォルト設定
+Postgres:     <none>                 //SQLiteを利用するので不要
+Redis:        <none>                 //Redisは不要
+```
+
+### ボリュームの作成
+
+今回はSQLiteを使うので、ボリュームを永続化したいです。  
+[`fly volume create`](https://fly.io/docs/volumes/volume-manage/) を実行して、ボリュームを作成します。
+
+```bash
+fly vol create -r nrt -y sqlite3_volume
+```
+
+SQLite3のデータベースをvolumeにマウントします。  
+  
+↓fly.tomlの書き換え
+
+```toml
+[env]
+  WEB_CONCURRENCY = "1"
+  PORT = "3000"
+  DATABASE_URL = "sqlite3:///rails/storage/db/production.sqlite3"
+
+[[mounts]]
+  source = "sqlite3_volume"
+  destination = "/rails/storage"
+```
+
+↓database.ymlの書き換え
+
+```yml
+production:
+  primary:
+    <<: *default
+    database: storage/db/production.sqlite3
+```
+
+### Procfileの作成
+
+下記の内容でProcfileを作成します。
+
+``` procfile
+web: bundle exec puma -C config/puma.rb
+redis: redis-server config/redis.conf
+workers: FORK_PER_JOB=false INTERVAL=0.1 bundle exec resque-pool
+```
+
+### Dockerfileの編集
+
+EXPOSEするポートを3000にします。
+
+``` Dockerfile
+# Start server via Thruster by default, this can be overwritten at runtime
+EXPOSE 3000
+CMD ["./bin/thrust", "./bin/rails", "server"]
+```
+
+### デプロイコマンドの設定
+
+デプロイのタイミングでマイグレーションを実行したいので、release_commandに`bin/rails db:prepare`を設定します。
+
+```toml
+[deploy]
+  release_command = "bin/rails db:prepare"
+```
+
+## デプロイ
+
+デプロイを実行します。
+
+```bash
+fly deploy
+```
+
+デプロイが完了した後、各種ログを見てみたところ、`solid_queue`や`solid_cache_store`の設定でエラーが出ていました。  
+利用しないので、コメントアウトします。  
+※アプリを本番運用する場合は設定しようね。
+
+```ruby
+  # Replace the default in-process memory cache store with a durable alternative.
+  #config.cache_store = :solid_cache_store
+
+  # Replace the default in-process and non-durable queuing backend for Active Job.
+  #config.active_job.queue_adapter = :queue
+  #config.solid_queue.connects_to = { database: { writing: :queue } }
+```
+
+これで無事デプロイできました。
+
+![サインイン画面](/static/asset/2025/0223/flyIo-railsApp.png)
+
+## ただし…
+
+起動までにラグがあるので、アプリを本番運用するなら常時稼働したほうがいい。。。  
+SQLiteを使っているため kamal を使ってVPSサーバにデプロイするのが安上りでいいかもです。  
+
+ただ Fly.io を使えばデプロイが簡単にできるので、ポートフォリオやデモアプリを公開するのには便利そうです。
+
+## 参考
+
+- [シングルインスタンスでSQLiteなRails 8アプリをFly.ioにデプロイする](https://zenn.dev/laiso/articles/cabf017b512ce9)
