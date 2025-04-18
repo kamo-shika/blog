@@ -1,0 +1,89 @@
+---
+title: Docker（finch）を触ってみる
+date: 2025-04-18
+description: AWSが公開したコンテナ開発用のオープンソースクライアント「finch」を使ってみました。
+iconUrl: https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Love%20letter/Flat/love_letter_flat.svg
+---
+
+## はじめに
+
+### finch とは
+
+finch は AWS が公開したコンテナ開発用のオープンソースクライアントである。
+
+[finch（Github）](https://github.com/runfinch/finch)
+
+>Finch is an open source client for container development. Its simple installer provides a minimal native client along with an opinionated distribution of other open source components. Rather than creating even more options to reason about and choose from, Finch aims to help promote other projects by making it easy to install and use them, while offering a simple native client to tie it all together.
+>Finch provides a simple client which is integrated with nerdctl. For the core build/run/push/pull commands, Finch depends upon nerdctl to handle the heavy lifting. It works with containerd for container management, and with BuildKit to handle Open Container Initiative (OCI) image builds. These components are all pulled together and run within a virtual machine managed by Lima.
+>With Finch, you can leverage these existing projects without chasing down all the details. Just install and start running and building your containers!
+
+>Finchはコンテナ開発用のオープンソースクライアントである。 そのシンプルなインストーラーは、他のオープンソースコンポーネントの意見付きディストリビューションとともに、最小限のネイティブクライアントを提供する。 Finchは、理屈をこねて選択する選択肢をさらに増やすのではなく、シンプルなネイティブクライアントを提供しながら、それらを簡単にインストールして使えるようにすることで、他のプロジェクトの促進を支援することを目指している。
+>Finchは、nerdctlと統合されたシンプルなクライアントを提供する。 コアとなるbuild/run/push/pullコマンドについては、Finchはnerdctlに依存して重い仕事を処理する。 コンテナ管理ではcontainerdと、Open Container Initiative（OCI）イメージのビルドではBuildKitと連携する。 これらのコンポーネントはすべて一緒にまとめられ、Limaによって管理される仮想マシン内で実行される。
+>Finch を使用すれば、すべての詳細を追いかけることなく、既存のプロジェクトを活用することができる。 インストールするだけで、コンテナの実行と構築を開始できる！
+
+とのこと。いいね。
+
+## インストール
+
+### 実行環境
+
+私の環境は以下の通り。
+
+- Windows 11 Pro
+- 23H2
+- WSL 2
+
+※ WSLが必要な場合は `wsl --install` を実行すること。
+
+### 手順
+
+1. [finch の GitHub リリースページ](https://github.com/runfinch/finch/releases)からMSIインストーラーをダウンロードする。自分がダウンロード時のバージョンは、`v1.7.1` だった。※最新バージョンは `v1.7.2` だったが、MSIインストーラーが公開されてなかった。
+2. MSIインストーラーを実行して、インストールを実行する。
+3. `finch vm init` を一度実行する。初期セットアップには通常1分ほどかかる。
+
+## コンテナの起動
+
+### 公式のコンテナを起動してみる
+
+下記コマンドを実行してみて、コンテナが起動することを確認してみる。
+
+```bash
+finch run --rm public.ecr.aws/finch/hello-finch
+```
+
+無事コンテナが起動すると、可愛いアイコンが出てくる。
+
+```bash
+public.ecr.aws/finch/hello-finch:latest:                                          resolved       |++++++++++++++++++++++++++++++++++++++|
+index-sha256:a71e474da9ffd6ec3f8236dbf4ef807dd54531d6f05047edaeefa758f1b1bb7e:    done           |++++++++++++++++++++++++++++++++++++++|
+manifest-sha256:2f848edb93f7d0cfa20d7dc7add84586fe06d258d6dd54422d8015c584ff3b9e: done           |++++++++++++++++++++++++++++++++++++++|
+config-sha256:50c36f221209ea6829db90eff11db167d8cc22abf7c2c0f1e7f4a0c701c0592f:   done           |++++++++++++++++++++++++++++++++++++++|
+layer-sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1:    done           |++++++++++++++++++++++++++++++++++++++|
+layer-sha256:cb7e3bc996dd3208c5b4560d5f6571486e2fe90b5a1cc384e2d6af0dc07de02a:    done           |++++++++++++++++++++++++++++++++++++++|
+elapsed: 3.8 s                                                                    total:  1.0 Mi (279.9 KiB/s)
+
+                            @@@@@@@@@@@@@@@@@@@
+                        @@@@@@@@@@@@    @@@@@@@@@@@
+                      @@@@@@@                  @@@@@@@
+                    @@@@@@                        @@@@@@
+                  @@@@@@                            @@@@@
+                 @@@@@                      @@@#     @@@@@@@@@
+                @@@@@                     @@   @@@       @@@@@@@@@@
+                @@@@%                     @     @@            @@@@@@@@@@@
+                @@@@                                               @@@@@@@@
+                @@@@                                         @@@@@@@@@@@&
+                @@@@@                                  &@@@@@@@@@@@
+                 @@@@@                               @@@@@@@@
+                  @@@@@                            @@@@@(
+                   @@@@@@                        @@@@@@
+                     @@@@@@@                  @@@@@@@
+                        @@@@@@@@@@@@@@@@@@@@@@@@@@
+                            @@@@@@@@@@@@@@@@@@
+
+
+Hello from Finch!
+
+Visit us @ github.com/runfinch
+```
+
+一通り必要そうなコマンドは実行できそうなので、暫く使ってみよう。
